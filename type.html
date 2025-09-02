@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">Bearings by Type - Perfect Bearing</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="logo">
+          <a href="home.html" class="logo-placeholder">
+            <i class="fas fa-cog"></i>
+            <span>Perfect Bearing</span>
+          </a>
+        </div>
+        <ul class="nav-menu" id="nav-menu">
+          <li class="nav-search">
+            <div class="autocomplete-wrapper"> <input type="text" id="model-search-input"
+                placeholder="Search by model..." autocomplete="off" />
+              <ul id="autocomplete-list" class="autocomplete-list"></ul>
+              <button type="submit"><i class="fas fa-search"></i></button>
+            </div>
+          </li>
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="home.html#bearings" class="nav-link">Bearings</a></li>
+          <li><a href="home.html#about" class="nav-link">About Us</a></li>
+          <li><a href="home.html#contact" class="nav-link">Contact</a></li>
+
+        </ul>
+        <div class="hamburger" id="hamburger">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <section class="bearings-section" style="padding-top: 120px;">
+    <div class="container">
+      <h2 class="section-title" id="type-title">Loading Bearing Models...</h2>
+      <p class="section-subtitle">Available Models</p>
+      <div class="bearings-grid" id="bearings-grid">
+        <!-- Bearing cards will be dynamically inserted here by JavaScript -->
+        <p id="loading-message">Fetching data...</p>
+      </div>
+    </div>
+  </section>
+  <!-- WhatsApp Button -->
+  <div class="whatsapp-float">
+    <a href="https://wa.me/918460640113" target="_blank" class="whatsapp-button">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+  </div>
+  <footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Perfect Bearing</h3>
+                <p>Your trusted partner in industrial bearings since 2023.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="home.html#bearings">Bearings</a></li>
+                    <li><a href="home.html#about">About Us</a></li>
+                    <li><a href="home.html#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Info</h4>
+                <p><i class="fas fa-phone"></i> +91 8460640113</p>
+                <p><i class="fas fa-envelope"></i> perfectbearingbvn@gmail.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Perfect Bearing. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+  <script>
+    // Get references to HTML elements
+    const typeTitleElement = document.getElementById("type-title");
+    const pageTitleElement = document.getElementById("page-title");
+    const grid = document.getElementById("bearings-grid");
+    const loadingMessage = document.getElementById("loading-message");
+
+    // Read the 'Type' parameter from the URL (using capital 'T' as per your JSON)
+    const params = new URLSearchParams(window.location.search);
+    const bearingType = params.get("Type");
+
+    // Decode the URL component to get the actual string (e.g., "Steel Balls" from "Steel%20Balls")
+    const displayType = bearingType ? decodeURIComponent(bearingType) : "All Bearings";
+    typeTitleElement.innerText = displayType;
+    pageTitleElement.innerText = `${displayType} - Perfect Bearing`;
+
+    /**
+     * Creates an HTML card element for a given bearing object.
+     * This function now dynamically attempts to load images with various extensions.
+     * @param {Object} bearing - The bearing data object.
+     * @param {string} bearing.Model - The model number of the bearing.
+     * @param {number} bearing.idmm - Inner Diameter in mm.
+     * @param {number} bearing.odmm - Outer Diameter in mm.
+     * @param {number} bearing.thmm - Width/Thickness in mm.
+     * @param {string} bearing.image - Base name of the image (e.g., "tp1", "cone2").
+     */
+    function createBearingCard(bearing) {
+      const card = document.createElement("div");
+      card.className = "bearing-card"; // Apply CSS class for styling
+
+      // Create the anchor tag that wraps the card content
+      const anchor = document.createElement("a");
+      anchor.href = `bearing.html?model=${encodeURIComponent(bearing.Model)}`;
+
+      // Create the image element dynamically
+      const img = document.createElement("img");
+      img.className = "bearing-image-placeholder";
+      img.alt = `Image of ${bearing.Model} bearing`;
+
+      // Define the possible image extensions to try
+      const possibleExtensions = ['avif', 'jpg', 'jpeg', 'png', 'webp']; // Add or remove as needed
+      let currentExtensionIndex = 0;
+
+      // Function to try loading the image with the next available extension
+      function tryNextImageSource() {
+        if (currentExtensionIndex < possibleExtensions.length) {
+          const ext = possibleExtensions[currentExtensionIndex];
+          // Construct the full path: photos/base_image_name.extension
+          img.src = `photos/${bearing.image}.${ext}`;
+          currentExtensionIndex++;
+        } else {
+          // If all specified extensions fail, fall back to a generic default image
+          img.src = 'photos/default.jpg'; // Ensure you have a 'default.jpg' in your 'photos' folder
+          img.onerror = null; // Important: Prevent infinite loop if default also fails
+          console.warn(`Could not find image for base name "${bearing.image}" with common extensions. Using default.`, bearing);
+        }
+      }
+
+      // Set the initial onerror handler for the image.
+      // If the current 'src' fails to load, this function will be called to try the next one.
+      img.onerror = tryNextImageSource;
+      // Start the process by attempting to load the first image source
+      tryNextImageSource();
+
+      const cardContentHtml = `
+      <h3>${bearing.Model}</h3>
+      <p class="bearing-description">
+        Inner Diameter: ${bearing["Inner Diamater (mm)"]} mm, 
+        Outer Diameter: ${bearing["Outer Diamater (mm)"]} mm, 
+        Width: ${bearing["Width (mm)"]} mm
+      </p>
+      <div class="price-placeholder">
+        <a href="bearing.html?model=${encodeURIComponent(bearing.Model)}">Know More ⓘ</a>
+      </div>`;
+
+
+      // Append the dynamically created image element to the anchor
+      anchor.appendChild(img);
+      // Append the rest of the card content HTML after the image within the anchor
+      anchor.insertAdjacentHTML('beforeend', cardContentHtml);
+
+      // Append the complete anchor (with image and text) to the card div
+      card.appendChild(anchor);
+      // Add the fully constructed card to the grid
+      grid.appendChild(card);
+    }
+
+    // Fetch bearing data from bearings.json
+    fetch("bearings.json")
+      .then(response => {
+        // Check if the network response was successful (status code 200-299)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json(); // Parse the JSON data from the response
+      })
+      .then(data => {
+        // Remove the loading message once data is fetched
+        if (loadingMessage) {
+          loadingMessage.remove();
+        }
+
+        let filteredBearings = [];
+        if (bearingType) {
+          // If a specific type is requested, filter the data
+          // Ensure the 'Type' from JSON matches the decoded URL type exactly
+          filteredBearings = data.filter(item => item.Type === displayType);
+        } else {
+          // If no type is specified, display all bearings (optional, adjust as needed)
+          filteredBearings = data;
+        }
+
+        // Check if any models were found after filtering
+        if (filteredBearings.length === 0) {
+          grid.innerHTML = `<p>No models found for "${displayType}". Not listed yet.</p>`;
+          return;
+        }
+
+        // Create and append a card for each filtered bearing
+        filteredBearings.forEach(bearing => createBearingCard(bearing));
+      })
+      .catch(error => {
+        // Handle any errors during the fetch operation (e.g., network issues, JSON parsing errors)
+        console.error("Error fetching or parsing bearing data:", error);
+        grid.innerHTML = `<p>Error loading bearing data: ${error.message}. Please check your 'bearings.json' file and ensure it's accessible and correctly formatted, and that you are running a local server.</p>`;
+        if (loadingMessage) {
+          loadingMessage.remove(); // Remove loading message even on error
+        }
+      });
+  </script>
+  <script src="script.js"></script>
+</body>
+
+</html>
