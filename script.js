@@ -1,12 +1,12 @@
 let bearingData = [];
 
-fetch("bearings.json")
+fetch("latest db.json")
   .then(res => res.json())
   .then(data => {
     bearingData = data;
     console.log("Loaded bearings:", bearingData); // 🔍 check in browser console
   })
-  .catch(err => console.error("Error loading bearings.json:", err));
+  .catch(err => console.error("Error loading latest db.json:", err));
 
 const input = document.getElementById("model-search-input");
 const list = document.getElementById("autocomplete-list");

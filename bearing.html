@@ -144,7 +144,7 @@
       tryImage();
     }
 
-    fetch("bearings.json")
+    fetch("latest db.json")
       .then(res => {
         if (!res.ok) throw new Error("Failed to load data");
         return res.json();
@@ -177,10 +177,10 @@
     // Autocomplete search
     // ========================
     let bearingData = [];
-    fetch("bearings.json")
+    fetch("latest db.json")
       .then(res => res.json())
       .then(data => { bearingData = data; })
-      .catch(err => console.error("Error loading bearings.json:", err));
+      .catch(err => console.error("Error loading latest db.json:", err));
 
     const input = document.getElementById("model-search-input");
     const list = document.getElementById("autocomplete-list");

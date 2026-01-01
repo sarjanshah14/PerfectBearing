@@ -171,8 +171,8 @@
       grid.appendChild(card);
     }
 
-    // Fetch bearing data from bearings.json
-    fetch("bearings.json")
+    // Fetch bearing data from latest db.json
+    fetch("latest db.json")
       .then(response => {
         // Check if the network response was successful (status code 200-299)
         if (!response.ok) {
@@ -208,7 +208,7 @@
       .catch(error => {
         // Handle any errors during the fetch operation (e.g., network issues, JSON parsing errors)
         console.error("Error fetching or parsing bearing data:", error);
-        grid.innerHTML = `<p>Error loading bearing data: ${error.message}. Please check your 'bearings.json' file and ensure it's accessible and correctly formatted, and that you are running a local server.</p>`;
+        grid.innerHTML = `<p>Error loading bearing data: ${error.message}. Please check your 'latest db.json' file and ensure it's accessible and correctly formatted, and that you are running a local server.</p>`;
         if (loadingMessage) {
           loadingMessage.remove(); // Remove loading message even on error
         }
