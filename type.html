@@ -70,6 +70,22 @@
             return item["Type"] === bearingType;
           });
 
+          // Define global handler for grid images
+          window.retryImageLoad = function (img, baseName) {
+            const extensions = ['jpg', 'webp', 'png', 'jpeg'];
+            // Get current attempt index from attribute or 0
+            let index = parseInt(img.getAttribute('data-retry-index') || '0');
+
+            if (index < extensions.length) {
+              img.setAttribute('data-retry-index', index + 1);
+              img.src = `photos/${baseName}.${extensions[index]}`;
+            } else {
+              // All failed
+              img.onerror = null; // Stop handling
+              img.src = 'photos/default.jpg';
+            }
+          };
+
           if (filtered.length > 0) {
             grid.innerHTML = filtered.map(item => {
               const imageBase = (item.image || item.Model?.toLowerCase().replace(/\s+/g, "-") || "default").toString();
@@ -80,11 +96,7 @@
                                 <a href="bearing.html?model=${encodeURIComponent(item.Model)}">
                                     <div class="card-img">
                                         <img src="photos/${imageBase}.avif" 
-                                             onerror="this.onerror=null; this.src='photos/${imageBase}.jpg'; 
-                                                      this.onerror=function(){this.src='photos/${imageBase}.webp'; 
-                                                      this.onerror=function(){this.src='photos/${imageBase}.png'; 
-                                                      this.onerror=function(){this.src='photos/${imageBase}.jpeg'; 
-                                                      this.onerror=function(){this.src='photos/default.jpg';}}}}}" 
+                                             onerror="retryImageLoad(this, '${imageBase}')"
                                              alt="${item.Model}" loading="lazy">
                                     </div>
                                     <div class="card-body">
