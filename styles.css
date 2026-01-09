@@ -26,6 +26,7 @@
   /* Dimensions & Spacing */
   --container-width: 1200px;
   --header-height: 70px;
+  --strip-height: 36px;
   --radius: 6px;
 
   /* Shadows (Minimal) */
@@ -39,6 +40,9 @@
   --bg-body: #0f1115;
   --bg-surface: #181b21;
   --bg-surface-hover: #22262e;
+  /* Brand Strip Dark Mode */
+  --bg-strip: #ffffff;
+  /* Logos likely need white bg if they are not transparent, or just keep strip white always */
 
   --text-primary: #f3f4f6;
   --text-secondary: #d1d5db;
@@ -58,8 +62,8 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px;
-  /* Offset for fixed header */
+  scroll-padding-top: calc(var(--header-height) + var(--strip-height) + 10px);
+  /* Offset for fixed header + strip */
 }
 
 body {
@@ -92,6 +96,54 @@ img {
 }
 
 /* ==========================================================================
+   Brand Strip (Marquee)
+   ========================================================================== */
+.brand-strip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--strip-height);
+  background: white;
+  /* Always white for logo visibility */
+  z-index: 1002;
+  /* Above Header */
+  overflow: hidden;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+}
+
+.brand-track {
+  display: flex;
+  align-items: center;
+  animation: scroll 40s linear infinite;
+  white-space: nowrap;
+  gap: 40px;
+  padding: 0 20px;
+}
+
+.brand-track img {
+  height: 24px;
+  /* Fit within 36px strip */
+  width: auto;
+  object-fit: contain;
+  /* Grayscale for subtle look, hover for color? User said "visible", let's keep color */
+  mix-blend-mode: multiply;
+  /* If logos have white bg */
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ==========================================================================
    Header & Navigation (Minimal)
    ========================================================================== */
 .header {
@@ -104,7 +156,7 @@ img {
   /* Softer border */
   position: fixed;
   /* Fixed as requested */
-  top: 0;
+  top: var(--strip-height);
   left: 0;
   right: 0;
   z-index: 1000;
@@ -124,6 +176,14 @@ img {
 }
 
 /* ... (brand/nav styles unchanged) ... */
+
+/* ==========================================================================
+   Catalog / Grid
+   ========================================================================== */
+.section {
+  padding: calc(100px + var(--strip-height)) 0 60px;
+  /* Increased top padding for fixed header + strip */
+}
 
 /* ==========================================================================
    Contact Section
@@ -828,7 +888,8 @@ img {
     /* Ensure Section Content clears Fixed Header on Mobile */
     .section,
     .container.section {
-      padding-top: 110px !important;
+      padding-top: 146px !important;
+      /* 110px + 36px strip */
       padding-bottom: 40px;
     }
 
