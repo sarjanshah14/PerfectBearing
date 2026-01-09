@@ -381,10 +381,8 @@ img {
    Hero Section
    ========================================================================== */
 .hero {
-  padding: 150px 0;
-  /* Adjusted Height (increased from 120px, still less than original 180px) */
-  padding: 150px 0;
-  /* Adjusted Height (increased from 120px, still less than original 180px) */
+  padding: 100px 0;
+  /* Reduced from 150px */
   /* margin-top removed for sticky header flow */
   background: var(--bg-surface);
   text-align: center;
@@ -478,8 +476,8 @@ img {
    Catalog / Grid
    ========================================================================== */
 .section {
-  padding: 100px 0 60px;
-  /* Increased top padding for fixed header */
+  padding: 40px 0 60px;
+  /* Reduced from 100px */
 }
 
 .section-header {
