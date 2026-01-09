@@ -62,8 +62,8 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-height) + var(--strip-height) + 10px);
-  /* Offset for fixed header + strip */
+  scroll-padding-top: calc(var(--header-height) + 20px);
+  /* Offset for sticky header */
 }
 
 body {
@@ -99,10 +99,8 @@ img {
    Brand Strip (Marquee)
    ========================================================================== */
 .brand-strip {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  /* position: fixed; removed to allow scrolling */
+  width: 100%;
   height: var(--strip-height);
   background: white;
   /* Always white for logo visibility */
@@ -154,9 +152,9 @@ img {
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   /* Softer border */
-  position: fixed;
-  /* Fixed as requested */
-  top: var(--strip-height);
+  position: sticky;
+  /* Sticky to stick after strip scrolls */
+  top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
@@ -181,8 +179,8 @@ img {
    Catalog / Grid
    ========================================================================== */
 .section {
-  padding: calc(100px + var(--strip-height)) 0 60px;
-  /* Increased top padding for fixed header + strip */
+  padding: 60px 0 60px;
+  /* Standard padding, no longer clearing fixed header */
 }
 
 /* ==========================================================================
@@ -366,8 +364,9 @@ img {
 .hero {
   padding: 150px 0;
   /* Adjusted Height (increased from 120px, still less than original 180px) */
-  margin-top: var(--header-height);
-  /* Ensure it starts after fixed navbar */
+  padding: 150px 0;
+  /* Adjusted Height (increased from 120px, still less than original 180px) */
+  /* margin-top removed for sticky header flow */
   background: var(--bg-surface);
   text-align: center;
   border-bottom: 1px solid var(--border-color);
@@ -888,8 +887,7 @@ img {
     /* Ensure Section Content clears Fixed Header on Mobile */
     .section,
     .container.section {
-      padding-top: 146px !important;
-      /* 110px + 36px strip */
+      /* Padding resets handled naturally by sticky flow/global padding */
       padding-bottom: 40px;
     }
 
