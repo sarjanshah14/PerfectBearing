@@ -74,18 +74,22 @@ if (searchInput) {
   searchInput.addEventListener("input", function () {
     const val = this.value.toLowerCase().trim();
     autocompleteList.innerHTML = "";
-    if (!val) return;
+    if (!val) {
+      autocompleteList.style.display = "none";
+      return;
+    }
 
     const filtered = bearingData.filter(item =>
       String(item.Model).toLowerCase().includes(val)
     ).slice(0, 10); // Limit results
 
-    filtered.forEach(item => {
-      const li = document.createElement("li");
-      const imageBase = (item.image || item.Model?.toLowerCase().replace(/\s+/g, "-") || "default").toString();
-      const bearingType = item.Type || "";
+    if (filtered.length > 0) {
+      filtered.forEach(item => {
+        const li = document.createElement("li");
+        const imageBase = (item.image || item.Model?.toLowerCase().replace(/\s+/g, "-") || "default").toString();
+        const bearingType = item.Type || "";
 
-      li.innerHTML = `
+        li.innerHTML = `
         <a href="bearing.html?model=${encodeURIComponent(item.Model)}">
             <img src="photos/${imageBase}.avif" 
                  onerror="retryImageLoad(this, '${imageBase}', '${bearingType}')" 
@@ -93,14 +97,19 @@ if (searchInput) {
             <span>${item.Model}</span>
         </a>
       `;
-      autocompleteList.appendChild(li);
-    });
+        autocompleteList.appendChild(li);
+      });
+      autocompleteList.style.display = "block";
+    } else {
+      autocompleteList.style.display = "none";
+    }
   });
 
   // Hide list on click outside
   document.addEventListener("click", (e) => {
     if (e.target !== searchInput && e.target !== autocompleteList) {
       autocompleteList.innerHTML = "";
+      autocompleteList.style.display = "none";
     }
   });
 
