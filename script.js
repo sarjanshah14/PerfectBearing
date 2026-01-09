@@ -65,15 +65,10 @@ window.retryImageLoad = function (img, baseName, category = '') {
    ========================================================================== */
 const searchInput = document.getElementById("model-search-input");
 const autocompleteList = document.getElementById("autocomplete-list");
-let bearingsData = [];
+// const autocompleteList = document.getElementById("autocomplete-list"); // Already declared above
+// let bearingsData = []; // Removed duplicate variable
 
-// Fetch data once
-fetch("latest db 1.json")
-  .then(res => res.json())
-  .then(data => {
-    bearingsData = data;
-  })
-  .catch(err => console.error("Error loading JSON:", err));
+// Fetch data logic moved to top (consolidated)
 
 if (searchInput) {
   searchInput.addEventListener("input", function () {
@@ -81,18 +76,19 @@ if (searchInput) {
     autocompleteList.innerHTML = "";
     if (!val) return;
 
-    const filtered = bearingsData.filter(item =>
+    const filtered = bearingData.filter(item =>
       String(item.Model).toLowerCase().includes(val)
     ).slice(0, 10); // Limit results
 
     filtered.forEach(item => {
       const li = document.createElement("li");
       const imageBase = (item.image || item.Model?.toLowerCase().replace(/\s+/g, "-") || "default").toString();
+      const bearingType = item.Type || "";
 
       li.innerHTML = `
         <a href="bearing.html?model=${encodeURIComponent(item.Model)}">
             <img src="photos/${imageBase}.avif" 
-                 onerror="retryImageLoad(this, '${imageBase}')" 
+                 onerror="retryImageLoad(this, '${imageBase}', '${bearingType}')" 
                  alt="bearing" loading="lazy">
             <span>${item.Model}</span>
         </a>
