@@ -381,8 +381,8 @@ img {
    Hero Section
    ========================================================================== */
 .hero {
-  padding: 100px 0;
-  /* Reduced from 150px */
+  padding: 130px 0;
+  /* Increased from 100px */
   /* margin-top removed for sticky header flow */
   background: var(--bg-surface);
   text-align: center;
