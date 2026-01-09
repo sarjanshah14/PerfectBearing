@@ -89,18 +89,10 @@
                             </div>
                         `;
 
-            // Image Fallback Handling - Robust Chain
+            // Image Fallback Handling - Uses global retryImageLoad from script.js
             const img = document.getElementById('main-img');
-            const extensions = ['jpg', 'webp', 'png', 'jpeg']; // avif is default src
-            let extIndex = 0;
-
             img.onerror = function () {
-              if (extIndex < extensions.length) {
-                img.src = `photos/${imageBase}.${extensions[extIndex++]}`;
-              } else {
-                img.src = 'photos/default.jpg';
-                img.onerror = null; // Stop infinite loop
-              }
+              window.retryImageLoad(this, imageBase);
             };
 
           } else {

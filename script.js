@@ -19,54 +19,68 @@ fetch("latest db 1.json")
   });
 
 /* ==========================================================================
-   Autocomplete Search
+   Global Image Fallback Helper
+   ========================================================================== */
+window.retryImageLoad = function (img, baseName) {
+  const extensions = ['jpg', 'webp', 'png', 'jpeg'];
+  // Get current attempt index from attribute or 0
+  let index = parseInt(img.getAttribute('data-retry-index') || '0');
+
+  if (index < extensions.length) {
+    img.setAttribute('data-retry-index', index + 1);
+    img.src = `photos/${baseName}.${extensions[index]}`;
+  } else {
+    // All failed
+    img.onerror = null; // Stop handling
+    img.src = 'photos/default.jpg';
+  }
+};
+
+/* ==========================================================================
+   Search & Autocomplete
    ========================================================================== */
 const searchInput = document.getElementById("model-search-input");
-const searchList = document.getElementById("autocomplete-list");
+const autocompleteList = document.getElementById("autocomplete-list");
+let bearingsData = [];
 
-function showSuggestions(query) {
-  if (!searchList) return;
-  searchList.innerHTML = "";
-
-  if (!query || bearingData.length === 0) {
-    searchList.style.display = "none";
-    return;
-  }
-
-  const matches = bearingData
-    .filter(b => {
-      const m = b.Model || b.model;
-      return m && String(m).toLowerCase().includes(query);
-    })
-    .slice(0, 10);
-
-  if (matches.length === 0) {
-    searchList.style.display = "none";
-    return;
-  }
-
-  matches.forEach(b => {
-    const li = document.createElement("li");
-    const m = b.Model || b.model;
-    li.textContent = m;
-    li.addEventListener("click", () => {
-      window.location.href = `bearing.html?model=${encodeURIComponent(m)}`;
-    });
-    searchList.appendChild(li);
-  });
-
-  searchList.style.display = "block";
-}
+// Fetch data once
+fetch("latest db 1.json")
+  .then(res => res.json())
+  .then(data => {
+    bearingsData = data;
+  })
+  .catch(err => console.error("Error loading JSON:", err));
 
 if (searchInput) {
-  searchInput.addEventListener("input", () => {
-    showSuggestions(searchInput.value.trim().toLowerCase());
+  searchInput.addEventListener("input", function () {
+    const val = this.value.toLowerCase().trim();
+    autocompleteList.innerHTML = "";
+    if (!val) return;
+
+    const filtered = bearingsData.filter(item =>
+      String(item.Model).toLowerCase().includes(val)
+    ).slice(0, 10); // Limit results
+
+    filtered.forEach(item => {
+      const li = document.createElement("li");
+      const imageBase = (item.image || item.Model?.toLowerCase().replace(/\s+/g, "-") || "default").toString();
+
+      li.innerHTML = `
+        <a href="bearing.html?model=${encodeURIComponent(item.Model)}">
+            <img src="photos/${imageBase}.avif" 
+                 onerror="retryImageLoad(this, '${imageBase}')" 
+                 alt="bearing" loading="lazy">
+            <span>${item.Model}</span>
+        </a>
+      `;
+      autocompleteList.appendChild(li);
+    });
   });
 
-  // Close when clicking outside
-  document.addEventListener("click", e => {
-    if (!e.target.closest(".search-wrapper")) {
-      if (searchList) searchList.style.display = "none";
+  // Hide list on click outside
+  document.addEventListener("click", (e) => {
+    if (e.target !== searchInput && e.target !== autocompleteList) {
+      autocompleteList.innerHTML = "";
     }
   });
 
