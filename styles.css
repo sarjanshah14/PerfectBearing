@@ -244,7 +244,8 @@ img {
 }
 
 .brand {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
+  /* Increased from 1.25rem */
   font-weight: 700;
   color: var(--text-primary);
   display: flex;
@@ -269,7 +270,8 @@ img {
 }
 
 .nav-link {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
+  /* Increased from 0.95rem */
   font-weight: 500;
   color: var(--text-secondary);
 }
@@ -381,8 +383,8 @@ img {
    Hero Section
    ========================================================================== */
 .hero {
-  padding: 130px 0;
-  /* Increased from 100px */
+  padding: 160px 0;
+  /* Increased further to 160px */
   /* margin-top removed for sticky header flow */
   background: var(--bg-surface);
   text-align: center;
