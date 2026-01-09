@@ -21,14 +21,38 @@ fetch("latest db 1.json")
 /* ==========================================================================
    Global Image Fallback Helper
    ========================================================================== */
-window.retryImageLoad = function (img, baseName) {
-  const extensions = ['jpg', 'webp', 'png', 'jpeg'];
+window.retryImageLoad = function (img, baseName, category = '') {
+  const extensions = ['jpg', 'webp', 'png', 'jpeg', 'avif'];
   // Get current attempt index from attribute or 0
   let index = parseInt(img.getAttribute('data-retry-index') || '0');
+
+  // Fallback Map (Category -> Generic Image)
+  const typeFallback = {
+    'steel-balls': 'sb.jpg',
+    'housing-&-bearing': 'h&b.jpg',
+    'four-point-contact-ball-bearing': 'DP1.jpg',
+    'single-row-tapered-roller-bearing': 'tp1.avif',
+    'double-row-tapered-roller-bearing': 'drt1.avif',
+    'cylindrical-roller-bearing': 'cr1.avif',
+    'spherical-roller-bearing': 'spr1.jpeg',
+    'thrust-ball-bearing': 'thrust.webp',
+    'deep-groove-ball-bearing': 'db1.avif'
+  };
 
   if (index < extensions.length) {
     img.setAttribute('data-retry-index', index + 1);
     img.src = `photos/${baseName}.${extensions[index]}`;
+  } else if (category && !img.getAttribute('data-fallback-tried')) {
+    // Try Category Image once
+    const catKey = category.toLowerCase().trim();
+    if (typeFallback[catKey]) {
+      img.setAttribute('data-fallback-tried', 'true');
+      img.src = `photos/${typeFallback[catKey]}`;
+    } else {
+      // No category match, go default
+      img.onerror = null;
+      img.src = 'photos/default.jpg';
+    }
   } else {
     // All failed
     img.onerror = null; // Stop handling

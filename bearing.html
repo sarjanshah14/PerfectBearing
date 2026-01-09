@@ -106,9 +106,11 @@
 
             // Image Logic
             const imageBase = bearing.image || bearing.Model?.toLowerCase().replace(/\s+/g, "-") || "default";
-            // Note: For simplicity, we'll let the script try loading via img onerror in HTML string is tricky, 
-            // so we'll just set it and let a helper function fix it.
+            const bearingType = bearing.Type || "";
 
+            // ... (HTML generation skipped for brevity logic is same)
+
+            // HTML generation with type aware onerror
             container.innerHTML = `
                             <div class="detail-layout">
                                 <div class="detail-img">
@@ -130,7 +132,7 @@
             // Image Fallback Handling - Uses global retryImageLoad from script.js
             const img = document.getElementById('main-img');
             img.onerror = function () {
-              window.retryImageLoad(this, imageBase);
+              window.retryImageLoad(this, imageBase, bearingType);
             };
 
           } else {

@@ -118,7 +118,7 @@
                                 <a href="bearing.html?model=${encodeURIComponent(item.Model)}">
                                     <div class="card-img">
                                         <img src="photos/${imageBase}.avif" 
-                                             onerror="retryImageLoad(this, '${imageBase}')"
+                                             onerror="retryImageLoad(this, '${imageBase}', '${bearingType}')"
                                              alt="${item.Model}" loading="lazy">
                                     </div>
                                     <div class="card-body">
