@@ -102,12 +102,13 @@ img {
   /* position: fixed; removed to allow scrolling */
   width: 100%;
   height: var(--strip-height);
-  background: white;
-  /* Always white for logo visibility */
+  background: var(--bg-body);
+  /* Matches theme */
   z-index: 1002;
   /* Above Header */
   overflow: hidden;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
+  /* Use var */
   display: flex;
   align-items: center;
 }
@@ -129,6 +130,12 @@ img {
   /* Grayscale for subtle look, hover for color? User said "visible", let's keep color */
   mix-blend-mode: multiply;
   /* If logos have white bg */
+}
+
+/* Dark Mode Logo Handling */
+[data-theme="dark"] .brand-track img {
+  filter: invert(1);
+  mix-blend-mode: screen;
 }
 
 @keyframes scroll {
