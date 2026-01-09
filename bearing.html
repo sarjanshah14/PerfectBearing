@@ -1,269 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="page-title">Bearing Details - Perfect Bearing</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bearing Details - Perfect Bearing</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 
 <body>
+
   <header class="header">
-    <nav class="navbar">
-      <div class="nav-container">
-        <div class="logo">
-          <a href="home.html" class="logo-placeholder">
-            <i class="fas fa-cog"></i>
-            <span>Perfect Bearing</span>
-          </a>
+    <div class="container nav-container">
+      <a href="home.html" class="brand">
+        <i class="fas fa-cog"></i> Perfect Bearing
+      </a>
+
+      <nav class="nav-menu">
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="home.html#bearings" class="nav-link">Bearings</a>
+        <a href="home.html#about" class="nav-link">About Us</a>
+        <a href="home.html#contact" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-tools">
+        <div class="search-wrapper">
+          <input type="text" class="search-input" id="model-search-input" placeholder="Search model..."
+            autocomplete="off">
+          <ul class="autocomplete-list" id="autocomplete-list"></ul>
         </div>
-        <ul class="nav-menu" id="nav-menu">
-          <li class="nav-search">
-            <div class="autocomplete-wrapper">
-              <input type="text" id="model-search-input" placeholder="Search by model..." autocomplete="off" />
-              <ul id="autocomplete-list" class="autocomplete-list"></ul>
-              <button type="submit"><i class="fas fa-search"></i></button>
-            </div>
-          </li>
-          <li><a href="home.html" class="nav-link">Home</a></li>
-          <li><a href="home.html#bearings" class="nav-link">Bearings</a></li>
-          <li><a href="home.html#about" class="nav-link">About Us</a></li>
-          <li><a href="home.html#contact" class="nav-link">Contact</a></li>
-        </ul>
-        <div class="hamburger" id="hamburger">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
-        </div>
+        <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
       </div>
-    </nav>
+    </div>
   </header>
 
-  <section class="details-section">
-    <div class="container">
-      <div class="details-card" id="details-card">
-        <div class="loading-state" id="loading-state">
-          <h2>Loading Bearing Details...</h2>
-        </div>
-      </div>
-    </div>
-  </section>
+  <div class="container section">
+    <a href="home.html#bearings"
+      style="display: inline-block; margin-bottom: 20px; font-weight: 500; color: var(--text-secondary);">&larr; Back to
+      Catalog</a>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h3>Perfect Bearing</h3>
-          <p>Your trusted partner in industrial bearings since 2023.</p>
-        </div>
-        <div class="footer-section">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="home.html">Home</a></li>
-            <li><a href="home.html#bearings">Bearings</a></li>
-            <li><a href="home.html#about">About Us</a></li>
-            <li><a href="home.html#contact">Contact</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h4>Contact Info</h4>
-          <p><i class="fas fa-phone"></i> +91 8460640113</p>
-          <p><i class="fas fa-envelope"></i> perfectbearingbvn@gmail.com</p>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2024 Perfect Bearing. All rights reserved.</p>
-      </div>
+    <div id="details-container">
+      <p style="text-align: center; color: var(--text-muted);">Loading details...</p>
     </div>
-  </footer>
-
-  <div class="whatsapp-float">
-    <a href="https://wa.me/918460640113" target="_blank" class="whatsapp-button">
-      <i class="fab fa-whatsapp"></i>
-    </a>
   </div>
 
   <script>
     // ========================
-    // Bearing details handling
+    // Render Logic (Inline for simplicity)
     // ========================
     const modelParam = new URLSearchParams(window.location.search).get("model");
     const decodedModel = decodeURIComponent(modelParam || "").trim();
-    const pageTitle = document.getElementById("page-title");
-    const detailsCard = document.getElementById("details-card");
-    const loadingState = document.getElementById("loading-state");
+    const container = document.getElementById("details-container");
 
     if (decodedModel) {
-      pageTitle.innerText = `${decodedModel} - Perfect Bearing`;
-    }
+      fetch("latest db 1.json")
+        .then(res => res.json())
+        .then(data => {
+          const bearing = data.find(item => String(item.Model).trim() === decodedModel);
 
-    function renderBearing(bearing) {
-      const specsList = Object.entries(bearing)
-        .filter(([key]) => key.toLowerCase() !== "image")
-        .map(([key, value]) => {
-          const formattedKey = key.replace(/([A-Z])/g, " $1").replace(/^./, str => str.toUpperCase());
-          return `<li><strong>${formattedKey}:</strong> <span>${value}</span></li>`;
+          if (bearing) {
+            // Specs
+            const specsRows = Object.entries(bearing)
+              .filter(([key]) => key.toLowerCase() !== "image" && key !== "Model")
+              .map(([key, value]) => `<tr><th>${key}</th><td>${value}</td></tr>`)
+              .join("");
+
+            // Image Logic
+            const imageBase = bearing.image || bearing.Model?.toLowerCase().replace(/\s+/g, "-") || "default";
+            // Note: For simplicity, we'll let the script try loading via img onerror in HTML string is tricky, 
+            // so we'll just set it and let a helper function fix it.
+
+            container.innerHTML = `
+                            <div class="detail-layout">
+                                <div class="detail-img">
+                                    <img id="main-img" src="photos/${imageBase}.avif" alt="${bearing.Model}">
+                                </div>
+                                <div class="detail-info">
+                                    <h1 class="detail-title">${bearing.Model}</h1>
+                                    <table class="spec-table">
+                                        <tbody>${specsRows}</tbody>
+                                    </table>
+                                    
+                                    <a href="https://wa.me/918460640113?text=Inquiry%20about%20${encodeURIComponent(bearing.Model)}" target="_blank" class="btn-whatsapp">
+                                        <i class="fab fa-whatsapp"></i> Inquiry on WhatsApp
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+
+            // Image Fallback Handling
+            const img = document.getElementById('main-img');
+            const extensions = ['webp', 'png', 'jpg', 'jpeg'];
+            let extIndex = 0;
+            img.onerror = function () {
+              if (extIndex < extensions.length) {
+                img.src = `photos/${imageBase}.${extensions[extIndex++]}`;
+              } else {
+                img.src = 'photos/default.jpg';
+                img.onerror = null;
+              }
+            };
+
+          } else {
+            container.innerHTML = `<p>Model not found.</p>`;
+          }
         })
-        .join("");
-
-      detailsCard.innerHTML = `
-        <div class="details-grid">
-          <div class="image-section">
-            <h1 class="bearing-model-title">${bearing.Model || "Unnamed Model"}</h1>
-            <img id="bearing-image" class="bearing-image" src="" alt="${bearing.Model}" />
-            <div class="inquiry-button-box">
-              <a href="https://wa.me/918460640113?text=Hello%2C%20I%20would%20like%20to%20inquire%20about%20bearing%20model%20${encodeURIComponent(bearing.Model)}" 
-                class="inquiry-button" target="_blank">
-                <i class="fab fa-whatsapp"></i> Inquiry
-              </a>
-            </div>
-          </div>
-          <div class="specs-section">
-            <h2>Specifications</h2>
-            <ul class="spec-list">${specsList}</ul>
-          </div>
-        </div>
-      `;
-
-      const imgElement = document.getElementById("bearing-image");
-      const imageBase = bearing.image || bearing.Model?.toLowerCase().replace(/\s+/g, "-") || "default";
-      const extensions = ["avif", "webp", "png", "jpg", "jpeg"];
-      let i = 0;
-
-      const tryImage = () => {
-        if (i < extensions.length) {
-          imgElement.src = `photos/${imageBase}.${extensions[i++]}`;
-        } else {
-          imgElement.src = "photos/default.jpg";
-          imgElement.onerror = null;
-        }
-      };
-
-      imgElement.onerror = tryImage;
-      tryImage();
-    }
-
-    fetch("latest db.json")
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to load data");
-        return res.json();
-      })
-      .then(data => {
-        loadingState.style.display = "none";
-        const bearing = data.find(item => String(item.Model).trim() === decodedModel);
-        if (bearing) {
-          renderBearing(bearing);
-        } else {
-          detailsCard.innerHTML = `
-            <div class="not-found-state">
-              <h2>Bearing Not Found</h2>
-              <p>No details available for model <strong>${decodedModel}</strong>.</p>
-              <a href="home.html#bearings">Back to Bearings</a>
-            </div>`;
-        }
-      })
-      .catch(err => {
-        loadingState.style.display = "none";
-        detailsCard.innerHTML = `
-          <div class="error-state">
-            <h2>Error</h2>
-            <p>Unable to load bearing data: ${err.message}</p>
-          </div>`;
-        console.error("Data load error:", err);
-      });
-
-    // ========================
-    // Autocomplete search
-    // ========================
-    let bearingData = [];
-    fetch("latest db.json")
-      .then(res => res.json())
-      .then(data => { bearingData = data; })
-      .catch(err => console.error("Error loading latest db.json:", err));
-
-    const input = document.getElementById("model-search-input");
-    const list = document.getElementById("autocomplete-list");
-
-    function showSuggestions(query) {
-      list.innerHTML = "";
-      if (!query || bearingData.length === 0) {
-        list.style.display = "none";
-        return;
-      }
-      const matches = bearingData
-        .filter(b => String(b.Model || b.model).toLowerCase().includes(query))
-        .slice(0, 10);
-
-      if (matches.length === 0) {
-        list.style.display = "none";
-        return;
-      }
-
-      matches.forEach(b => {
-        const li = document.createElement("li");
-        li.textContent = b.Model || b.model;
-        li.addEventListener("click", () => {
-          window.location.href = `bearing.html?model=${encodeURIComponent(li.textContent)}`;
+        .catch(err => {
+          container.innerHTML = `<p>Error loading data.</p>`;
+          console.error(err);
         });
-        list.appendChild(li);
-      });
-      list.style.display = "block";
     }
 
-    input.addEventListener("input", () => {
-      const query = input.value.trim().toLowerCase();
-      showSuggestions(query);
-    });
-
-    document.addEventListener("click", e => {
-      if (!e.target.closest(".autocomplete-wrapper")) {
-        list.style.display = "none";
-      }
-    });
-
-    input.addEventListener("keydown", e => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        const model = input.value.trim();
-        if (model) {
-          window.location.href = `bearing.html?model=${encodeURIComponent(model)}`;
-        }
-      }
-    });
-
-    // ========================
-    // Navbar + Smooth Scroll
-    // ========================
-    const hamburger = document.getElementById("hamburger");
-    const navMenu = document.getElementById("nav-menu");
-
-    hamburger?.addEventListener("click", () => {
-      navMenu.classList.toggle("active");
-      hamburger.classList.toggle("active");
-    });
-
-    document.querySelectorAll(".nav-link").forEach(link => {
-      link.addEventListener("click", () => {
-        navMenu.classList.remove("active");
-        hamburger.classList.remove("active");
-      });
-    });
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener("click", function (e) {
-        e.preventDefault();
-        const targetId = this.getAttribute("href");
-        if (targetId === "#") return;
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          window.scrollTo({
-            top: targetElement.offsetTop - 80,
-            behavior: "smooth"
-          });
-        }
-      });
-    });
+    // Search & Menu Logic will be handled by main script.js
   </script>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3>Perfect Bearing</h3>
+          <p>Leading exporter of industrial bearings committed to quality and service.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <a href="home.html#home">Home</a>
+          <a href="home.html#bearings">Products</a>
+          <a href="home.html#about">About Us</a>
+          <a href="home.html#contact">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h3>Get in Touch</h3>
+          <p>Bhavnagar, Gujarat, India</p>
+          <p>+91 8460640113</p>
+          <p>perfectbearingbvn@gmail.com</p>
+          <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/perfectbearing_" target="_blank"
+              style="display:inline;">@perfectbearing_</a></p>
+        </div>
+      </div>
+      <div class="copyright">
+        &copy; 2024 Perfect Bearing. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Buttons -->
+  <a href="#" class="float-btn float-top" id="scrollToTop" title="Top"><i class="fas fa-arrow-up"></i></a>
+  <a href="https://wa.me/918460640113" target="_blank" class="float-btn float-wa" title="WhatsApp"><i
+      class="fab fa-whatsapp"></i></a>
+
+  <script src="script.js"></script>
 </body>
+
 </html>
