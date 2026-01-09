@@ -91,9 +91,6 @@ if (searchInput) {
 
         li.innerHTML = `
         <a href="bearing.html?model=${encodeURIComponent(item.Model)}">
-            <img src="photos/${imageBase}.avif" 
-                 onerror="retryImageLoad(this, '${imageBase}', '${bearingType}')" 
-                 alt="bearing" loading="lazy">
             <span>${item.Model}</span>
         </a>
       `;
