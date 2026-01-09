@@ -89,16 +89,17 @@
                             </div>
                         `;
 
-            // Image Fallback Handling
+            // Image Fallback Handling - Robust Chain
             const img = document.getElementById('main-img');
-            const extensions = ['webp', 'png', 'jpg', 'jpeg'];
+            const extensions = ['jpg', 'webp', 'png', 'jpeg']; // avif is default src
             let extIndex = 0;
+
             img.onerror = function () {
               if (extIndex < extensions.length) {
                 img.src = `photos/${imageBase}.${extensions[extIndex++]}`;
               } else {
                 img.src = 'photos/default.jpg';
-                img.onerror = null;
+                img.onerror = null; // Stop infinite loop
               }
             };
 

@@ -247,6 +247,15 @@ img {
   color: var(--text-primary);
   width: 200px;
   outline: none;
+  transition: width 0.3s;
+}
+
+@media (max-width: 480px) {
+  .search-input {
+    width: 120px;
+    /* Smaller on mobile */
+    font-size: 0.85rem;
+  }
 }
 
 .search-input:focus {
@@ -727,6 +736,60 @@ img {
 
   .detail-layout {
     flex-direction: column;
+  }
+
+  /* Mobile-specific adjustments */
+  @media (max-width: 480px) {
+    .nav-container {
+      padding: 0 15px;
+      /* Ensure padding on small screens */
+    }
+
+    .brand {
+      font-size: 1rem;
+      /* Smaller logo text */
+      gap: 5px;
+    }
+
+    .brand i {
+      font-size: 1.1rem;
+    }
+
+    /* Fix Header Elements Overflow */
+    .nav-tools {
+      gap: 8px;
+      /* Tighter spacing */
+    }
+
+    .theme-toggle {
+      width: 28px;
+      height: 28px;
+      font-size: 0.9rem;
+    }
+
+    .hamburger {
+      font-size: 1.1rem;
+      margin-left: 5px;
+    }
+
+    /* Fix Grid Spacing */
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 25px;
+      /* Explicit gap */
+    }
+
+    .container {
+      padding: 0 15px;
+      /* Ensure cards don't touch edges */
+    }
+
+    /* Fix Back to Catalog Link */
+    .section a[href*="index.html#bearings"] {
+      display: inline-block;
+      margin-left: 2px;
+      /* Prevent cutting off on left */
+    }
   }
 }
 

@@ -72,13 +72,20 @@
 
           if (filtered.length > 0) {
             grid.innerHTML = filtered.map(item => {
-              const imageBase = item.image || item.Model?.toLowerCase().replace(/\s+/g, "-") || "default";
+              const imageBase = (item.image || item.Model?.toLowerCase().replace(/\s+/g, "-") || "default").toString();
 
+              // Fallback chain: avif -> jpg -> webp -> png -> jpeg -> default.jpg
               return `
                              <div class="card">
                                 <a href="bearing.html?model=${encodeURIComponent(item.Model)}">
                                     <div class="card-img">
-                                        <img src="photos/${imageBase}.avif" onerror="this.src='photos/${imageBase}.jpg'; this.onerror=function(){this.src='photos/default.jpg'}" alt="${item.Model}">
+                                        <img src="photos/${imageBase}.avif" 
+                                             onerror="this.onerror=null; this.src='photos/${imageBase}.jpg'; 
+                                                      this.onerror=function(){this.src='photos/${imageBase}.webp'; 
+                                                      this.onerror=function(){this.src='photos/${imageBase}.png'; 
+                                                      this.onerror=function(){this.src='photos/${imageBase}.jpeg'; 
+                                                      this.onerror=function(){this.src='photos/default.jpg';}}}}}" 
+                                             alt="${item.Model}" loading="lazy">
                                     </div>
                                     <div class="card-body">
                                         <h3 class="card-title">${item.Model}</h3>
