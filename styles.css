@@ -820,8 +820,16 @@ img {
     }
 
     .container {
-      padding: 0 15px;
-      /* Ensure cards don't touch edges */
+      padding-left: 15px;
+      padding-right: 15px;
+      /* Ensure cards don't touch edges, protect vertical padding */
+    }
+
+    /* Ensure Section Content clears Fixed Header on Mobile */
+    .section,
+    .container.section {
+      padding-top: 110px !important;
+      padding-bottom: 40px;
     }
 
     /* Fix Back to Catalog Link */
