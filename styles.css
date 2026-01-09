@@ -249,6 +249,12 @@ img {
   color: var(--accent-color);
 }
 
+.nav-logo {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+
 .nav-menu {
   display: flex;
   align-items: center;
