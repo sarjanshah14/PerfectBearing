@@ -773,24 +773,65 @@ img {
     }
 
     /* Fix Grid Spacing */
+    /* Fix Grid Spacing for 2-Column Layout */
     .grid {
-      grid-template-columns: 1fr;
-      gap: 25px;
-      /* Explicit gap */
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      /* Tighter gap for mobile */
     }
 
-    .container {
-      padding: 0 15px;
-      /* Ensure cards don't touch edges */
+    /* Compact Card Styles for Mobile */
+    .card {
+      border-radius: 8px;
+      /* Slightly reduced radius */
     }
 
-    /* Fix Back to Catalog Link */
-    .section a[href*="index.html#bearings"] {
-      display: inline-block;
-      margin-left: 2px;
-      /* Prevent cutting off on left */
+    .card-img {
+      height: 120px;
+      /* Reduced height */
+      padding: 10px;
+    }
+
+    .card-body {
+      padding: 10px;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-desc {
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      /* Show only 2 lines */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.3;
+    }
+
+    .card-link {
+      font-size: 0.85rem;
     }
   }
+
+  .container {
+    padding: 0 15px;
+    /* Ensure cards don't touch edges */
+  }
+
+  /* Fix Back to Catalog Link */
+  .section a[href*="index.html#bearings"] {
+    display: inline-block;
+    margin-left: 2px;
+    /* Prevent cutting off on left */
+  }
+}
 }
 
 /* Floating Buttons */
