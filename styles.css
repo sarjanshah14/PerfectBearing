@@ -314,6 +314,12 @@ img {
   transition: width 0.3s;
 }
 
+.search-input::placeholder {
+  color: #6b7280;
+  /* Neutral darker gray for better visibility */
+  opacity: 1;
+}
+
 @media (max-width: 480px) {
   .search-input {
     width: 120px;
