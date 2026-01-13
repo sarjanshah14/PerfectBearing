@@ -105,7 +105,8 @@
             // For now assuming the previous logic was correct about 'Type' field.
             // But looking at previous code, it seemed to filter by... wait, let's just show all for that type.
             // Previous code snippet showed: bearing["Type"] === bearingType
-            return item["Type"] === bearingType;
+            // Robust comparison with trim
+            return item["Type"]?.trim() === bearingType?.trim();
           });
 
           if (filtered.length > 0) {

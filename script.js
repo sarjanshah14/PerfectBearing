@@ -36,7 +36,10 @@ window.retryImageLoad = function (img, baseName, category = '') {
     'cylindrical-roller-bearing': 'cr1.avif',
     'spherical-roller-bearing': 'spr1.jpeg',
     'thrust-ball-bearing': 'thrust.webp',
-    'deep-groove-ball-bearing': 'db1.avif'
+    'deep-groove-ball-bearing': 'db1.avif',
+    'cooper-bearing': 'COPM.avif',
+    'yoke-type-track-roller-bearing': 'nutr.avif',
+    'carb-toroidal-roller-bearing': 'C2215V.avif'
   };
 
   if (index < extensions.length) {
