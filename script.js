@@ -237,8 +237,15 @@ if (themeToggle) {
 /* ==========================================================================
    Scroll To Top
    ========================================================================== */
+/* ==========================================================================
+   Scroll To Top
+   ========================================================================== */
 const scrollBtn = document.getElementById("scrollToTop");
 if (scrollBtn) {
+  // Ensure hidden initially
+  scrollBtn.style.opacity = "0";
+  scrollBtn.style.visibility = "hidden";
+
   window.addEventListener("scroll", () => {
     if (window.scrollY > 300) {
       scrollBtn.style.opacity = "1";

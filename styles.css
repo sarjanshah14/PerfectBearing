@@ -102,12 +102,13 @@ img {
   /* position: fixed; removed to allow scrolling */
   width: 100%;
   height: var(--strip-height);
-  background: white;
-  /* Always white for logo visibility */
+  background: var(--bg-body);
+  /* Matches theme */
   z-index: 1002;
   /* Above Header */
   overflow: hidden;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
+  /* Use var */
   display: flex;
   align-items: center;
 }
@@ -129,6 +130,12 @@ img {
   /* Grayscale for subtle look, hover for color? User said "visible", let's keep color */
   mix-blend-mode: multiply;
   /* If logos have white bg */
+}
+
+/* Dark Mode Logo Handling */
+[data-theme="dark"] .brand-track img {
+  filter: invert(1);
+  mix-blend-mode: screen;
 }
 
 @keyframes scroll {
@@ -237,7 +244,8 @@ img {
 }
 
 .brand {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
+  /* Increased from 1.25rem */
   font-weight: 700;
   color: var(--text-primary);
   display: flex;
@@ -262,7 +270,8 @@ img {
 }
 
 .nav-link {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
+  /* Increased from 0.95rem */
   font-weight: 500;
   color: var(--text-secondary);
 }
@@ -374,10 +383,8 @@ img {
    Hero Section
    ========================================================================== */
 .hero {
-  padding: 150px 0;
-  /* Adjusted Height (increased from 120px, still less than original 180px) */
-  padding: 150px 0;
-  /* Adjusted Height (increased from 120px, still less than original 180px) */
+  padding: 160px 0;
+  /* Increased further to 160px */
   /* margin-top removed for sticky header flow */
   background: var(--bg-surface);
   text-align: center;
@@ -471,8 +478,8 @@ img {
    Catalog / Grid
    ========================================================================== */
 .section {
-  padding: 100px 0 60px;
-  /* Increased top padding for fixed header */
+  padding: 40px 0 60px;
+  /* Reduced from 100px */
 }
 
 .section-header {

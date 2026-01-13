@@ -2,6 +2,15 @@
 <html lang="en">
 
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPXS15KG0K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-BPXS15KG0K');
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bearing Details - Perfect Bearing</title>
@@ -74,9 +83,10 @@
   </header>
 
   <div class="container section">
-    <a href="index.html#bearings"
-      style="display: inline-block; margin-bottom: 20px; font-weight: 500; color: var(--text-secondary);">&larr; Back to
-      Catalog</a>
+    <a href="#"
+      onclick="if(document.referrer.indexOf(window.location.host) !== -1) { history.back(); return false; } else { window.location.href='index.html#bearings'; return false; }"
+      style="display: inline-block; margin-bottom: 20px; font-weight: 500; color: var(--text-secondary);">&larr;
+      Back</a>
 
     <div id="details-container">
       <p style="text-align: center; color: var(--text-muted);">Loading details...</p>
