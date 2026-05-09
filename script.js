@@ -89,8 +89,13 @@ if (searchInput) {
         const imageBase = (item.image || item.Model?.toLowerCase().replace(/\s+/g, "-") || "default").toString();
         const bearingType = item.Type || "";
 
+        const slug = String(item.Model)
+          .toLowerCase()
+          .replace(/\s+/g, "-")
+          .replace(/[^a-z0-9\-\.]/g, "");
+
         li.innerHTML = `
-        <a href="bearing.html?model=${encodeURIComponent(item.Model)}">
+        <a href="bearings/${slug}.html">
             <span>${item.Model}</span>
         </a>
       `;
