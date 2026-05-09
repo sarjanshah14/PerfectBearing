@@ -113,9 +113,16 @@ if (searchInput) {
   searchInput.addEventListener("keydown", e => {
     if (e.key === "Enter") {
       e.preventDefault();
-      const val = searchInput.value.trim();
-      if (val) window.location.href = `bearing.html?model=${encodeURIComponent(val)}`;
-    }
+          const val = searchInput.value.trim();
+          if (val) {
+            const slug = String(val)
+              .toLowerCase()
+              .replace(/\s+/g, "-")
+              .replace(/[^a-z0-9\-\.]/g, "");
+            window.location.href = `bearings/${slug}.html`;
+          }
+        }
+
   });
 }
 

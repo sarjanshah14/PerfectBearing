@@ -126,9 +126,14 @@
               const imageBase = (item.image || item.Model?.toLowerCase().replace(/\s+/g, "-") || "default").toString();
 
               // Fallback chain: avif -> jpg -> webp -> png -> jpeg -> default.jpg
+              const slug = String(item.Model)
+                .toLowerCase()
+                .replace(/\s+/g, "-")
+                .replace(/[^a-z0-9\-\.]/g, "");
+
               return `
                              <div class="card">
-                                <a href="bearing.html?model=${encodeURIComponent(item.Model)}">
+                                <a href="bearings/${slug}.html">
                                     <div class="card-img">
                                         <img src="photos/${imageBase}.avif" 
                                              onerror="retryImageLoad(this, '${imageBase}', '${bearingType}')"
