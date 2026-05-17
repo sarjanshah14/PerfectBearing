@@ -5,7 +5,7 @@
 let bearingData = [];
 
 // Fetch data
-fetch("latest db 1.json")
+fetch("/latest db 1.json")
   .then(res => res.json())
   .then(data => {
     bearingData = data;
@@ -95,7 +95,7 @@ if (searchInput) {
           .replace(/[^a-z0-9\-\.]/g, "");
 
         li.innerHTML = `
-        <a href="bearings/${slug}.html">
+        <a href="/bearings/${slug}.html">
             <span>${item.Model}</span>
         </a>
       `;
@@ -109,7 +109,7 @@ if (searchInput) {
 
   // Hide list on click outside
   document.addEventListener("click", (e) => {
-    if (e.target !== searchInput && e.target !== autocompleteList) {
+    if (e.target !== searchInput && !autocompleteList.contains(e.target)) {
       autocompleteList.innerHTML = "";
       autocompleteList.style.display = "none";
     }
@@ -124,7 +124,7 @@ if (searchInput) {
               .toLowerCase()
               .replace(/\s+/g, "-")
               .replace(/[^a-z0-9\-\.]/g, "");
-            window.location.href = `bearings/${slug}.html`;
+            window.location.href = `/bearings/${slug}.html`;
           }
         }
 
