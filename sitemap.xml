@@ -8765,7 +8765,7 @@
         <priority>0.6</priority>
         <image:image>
             <image:loc>https://www.perfectbearing.co.in/photos/LRJA.avif</image:loc>
-            <image:title>LRJ1.1/8 / CRL9 / SL9 / NL9 R&M</image:title>
+            <image:title>LRJ1.1/8 / CRL9 / SL9 / NL9 R&amp;M</image:title>
         </image:image>
     </url>
     <url>
@@ -8835,7 +8835,7 @@
         <priority>0.6</priority>
         <image:image>
             <image:loc>https://www.perfectbearing.co.in/photos/NR11.avif</image:loc>
-            <image:title>MJT 2 1/4 / AMS18 / MS16AC   R&M</image:title>
+            <image:title>MJT 2 1/4 / AMS18 / MS16AC   R&amp;M</image:title>
         </image:image>
     </url>
     <url>
@@ -9095,7 +9095,7 @@
         <priority>0.6</priority>
         <image:image>
             <image:loc>https://www.perfectbearing.co.in/photos/NR11.avif</image:loc>
-            <image:title>LDJK 65/ LDJ 65K R&M</image:title>
+            <image:title>LDJK 65/ LDJ 65K R&amp;M</image:title>
         </image:image>
     </url>
     <url>
@@ -9105,7 +9105,7 @@
         <priority>0.6</priority>
         <image:image>
             <image:loc>https://www.perfectbearing.co.in/photos/NR11.avif</image:loc>
-            <image:title>LDJK70 / LDJ 70K R&M</image:title>
+            <image:title>LDJK70 / LDJ 70K R&amp;M</image:title>
         </image:image>
     </url>
     <url>
