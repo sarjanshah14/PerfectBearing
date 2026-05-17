@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /*.json$
 
 Sitemap: https://www.perfectbearing.co.in/sitemap.xml

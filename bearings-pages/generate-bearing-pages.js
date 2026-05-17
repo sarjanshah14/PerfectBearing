@@ -93,10 +93,25 @@ function buildSchema(bearing) {
       "availability": "https://schema.org/InStock",
       "itemCondition": "https://schema.org/NewCondition",
       "priceCurrency": "INR",
+      "price": "0",
+      "priceValidUntil": "2027-12-31",
+      "url": `${SITE_URL}/bearings/${slug}.html`,
       "seller": {
         "@type": "Organization",
         "name": "Perfect Bearing",
         "url": SITE_URL
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "IN",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
+      },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "IN"
+        }
       }
     },
     "additionalProperty": [
