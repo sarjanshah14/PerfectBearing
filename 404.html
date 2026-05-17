@@ -179,18 +179,33 @@
     </div>
   </div>
 
+  <!-- Header -->
   <header class="header">
     <div class="container nav-container">
       <a href="/" class="brand">
         <i class="fas fa-cog fa-spin" style="animation-duration: 10s;"></i> Perfect Bearing
       </a>
-      <nav class="nav-menu">
+
+      <nav class="nav-menu" id="nav-menu">
         <a href="/" class="nav-link">Home</a>
         <a href="/#bearings" class="nav-link">Bearings</a>
         <a href="/#about" class="nav-link">About Us</a>
         <a href="/#contact" class="nav-link">Contact</a>
       </nav>
+
       <div class="nav-tools">
+        <!-- Search -->
+        <div class="search-wrapper">
+          <input type="text" class="search-input" id="model-search-input" placeholder="Search model..." autocomplete="off">
+          <ul class="autocomplete-list" id="autocomplete-list"></ul>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">
+          <i class="fas fa-moon"></i>
+        </button>
+
+        <!-- Mobile Menu -->
         <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
       </div>
     </div>
@@ -258,37 +273,25 @@
 
   <a href="https://wa.me/918460640113" target="_blank" class="float-btn float-wa" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
 
+  <script src="/script.js"></script>
   <script>
-    // Search functionality on 404 page
-    const searchInput = document.getElementById('search-404');
-    const searchBtn = document.getElementById('search-404-btn');
+    // 404 page bottom search bar
+    const searchInput404 = document.getElementById('search-404');
+    const searchBtn404 = document.getElementById('search-404-btn');
     
-    function doSearch() {
-      const val = searchInput.value.trim();
+    function doSearch404() {
+      const val = searchInput404.value.trim();
       if (!val) return;
       const slug = val.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-\.]/g, '');
       window.location.href = '/bearings/' + slug + '.html';
     }
     
-    if (searchBtn) searchBtn.addEventListener('click', doSearch);
-    if (searchInput) {
-      searchInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); doSearch(); }
+    if (searchBtn404) searchBtn404.addEventListener('click', doSearch404);
+    if (searchInput404) {
+      searchInput404.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); doSearch404(); }
       });
     }
-
-    // Mobile menu
-    const hamburger = document.getElementById('hamburger');
-    const menu = document.querySelector('.nav-menu');
-    if (hamburger && menu) {
-      hamburger.addEventListener('click', function() {
-        menu.classList.toggle('active');
-        hamburger.querySelector('i').className = menu.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
-      });
-    }
-
-    // Dark mode
-    if (localStorage.getItem('theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
   </script>
 
 </body>
