@@ -14,7 +14,7 @@ const path = require("path");
 // ── Config ────────────────────────────────────────────────────────────────────
 const DB_FILE = "latest db 1.json";       // your JSON database
 const OUTPUT_DIR = "./bearings";           // folder to create pages in
-const SITE_URL = "https://perfectbearing.co.in";
+const SITE_URL = "https://www.perfectbearing.co.in";
 const WA_NUMBER = "918460640113";
 
 // Type fallback images (same as your script.js)
@@ -203,7 +203,11 @@ function buildPage(bearing, allData) {
     ]
   })}</script>
 
+  <!-- Favicon -->
+  <link rel="icon" href="../photos/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../photos/favicon.ico" type="image/x-icon">
   <link rel="icon" href="../photos/logo.jpg" type="image/jpeg">
+  <link rel="apple-touch-icon" href="../photos/logo.jpg">
   <link rel="stylesheet" href="../styles.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
