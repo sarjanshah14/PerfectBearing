@@ -23,16 +23,15 @@ const typeFallback = {
   "housing-&-bearing": "h&b.jpg",
   "four-point-contact-ball-bearing": "DP1.jpg",
   "single-row-tapered-roller-bearing": "tp1.avif",
-  "single-row-tapered-roller-bearing": "tp1.avif",
   "double-row-tapered-roller-bearing": "drt1.avif",
   "cylindrical-roller-bearing": "cr1.avif",
   "double-row-cylindrical-roller-bearing": "cr1.avif",
   "spherical-roller-bearing": "spr1.jpeg",
   "spherical-roller-thrust-bearing": "spr1.jpeg",
-  "thrust-bearing": "thrust.webp",
-  "deep-groove-ball-bearing": "db1.avif",
-  "angular-contact-ball-bearing": "db1.avif",
-  "self-aligning-ball-bearing": "db1.avif",
+  "thrust-bearing": "THRUST.webp",
+  "deep-groove-ball-bearing": "DP1.jpg",
+  "angular-contact-ball-bearing": "DP1.jpg",
+  "self-aligning-ball-bearing": "DP1.jpg",
   "needle-roller-bearing": "cr1.avif",
 };
 
@@ -50,16 +49,21 @@ function getFallbackImg(type) {
   return typeFallback[key] || "default.jpg";
 }
 
-function getImageSrc(bearing) {
+// Resolve the actual image file at build time instead of a runtime
+// onerror fallback chain, so og:image / schema image never 404.
+const IMG_EXTS = ["avif", "jpg", "webp", "png", "jpeg"];
+function resolveImage(bearing) {
   const imageBase = bearing.image || slugify(bearing.Model);
-  return `../photos/${imageBase}.avif`;
+  for (const ext of IMG_EXTS) {
+    if (fs.existsSync(path.join("photos", `${imageBase}.${ext}`))) {
+      return `${imageBase}.${ext}`;
+    }
+  }
+  return getFallbackImg(bearing.Type);
 }
 
-function getFallbackSrc(bearing) {
-  const imageBase = bearing.image || slugify(bearing.Model);
-  const catFallback = getFallbackImg(bearing.Type);
-  // We'll try jpg first, then category fallback
-  return `../photos/${imageBase}.jpg`;
+function typeUrl(type) {
+  return `${SITE_URL}/type?Type=${encodeURIComponent(type || "")}`;
 }
 
 function buildDescription(bearing) {
@@ -86,8 +90,8 @@ function buildSchema(bearing) {
     "description": bearing.description || buildDescription(bearing),
     "sku": model,
     "mpn": model,
-    "image": `${SITE_URL}/photos/${bearing.image || slug}.avif`,
-    "url": `${SITE_URL}/bearings/${slug}.html`,
+    "image": `${SITE_URL}/photos/${resolveImage(bearing)}`,
+    "url": `${SITE_URL}/bearings/${slug}`,
     "offers": {
       "@type": "Offer",
       "availability": "https://schema.org/InStock",
@@ -95,7 +99,7 @@ function buildSchema(bearing) {
       "priceCurrency": "INR",
       "price": "0",
       "priceValidUntil": "2027-12-31",
-      "url": `${SITE_URL}/bearings/${slug}.html`,
+      "url": `${SITE_URL}/bearings/${slug}`,
       "seller": {
         "@type": "Organization",
         "name": "Perfect Bearing",
@@ -141,13 +145,11 @@ function buildRelated(allData, bearing, count = 6) {
     .slice(0, count)
     .map(b => {
       const slug = slugify(b.Model);
-      const imgSrc = `../photos/${b.image || slug}.avif`;
-      const fallback = getFallbackImg(b.Type);
       return `
-        <a class="related-card" href="${slug}.html">
+        <a class="related-card" href="/bearings/${slug}">
           <div class="related-img">
-            <img src="${imgSrc}" 
-                 onerror="this.onerror=null;this.src='../photos/${fallback}'"
+            <img src="../photos/${resolveImage(b)}"
+                 onerror="this.onerror=null;this.src='../photos/default.jpg'"
                  alt="${b.Model}" loading="lazy">
           </div>
           <div class="related-name">${b.Model}</div>
@@ -164,9 +166,8 @@ function buildPage(bearing, allData) {
   const type = titleCase(bearing.Type || "Industrial Bearing");
   const pageTitle = `${model} ${brand} ${type} | Perfect Bearing`;
   const metaDesc = buildDescription(bearing);
-  const canonicalUrl = `${SITE_URL}/bearings/${slug}.html`;
-  const imageBase = bearing.image || slug;
-  const fallbackImg = getFallbackImg(bearing.Type);
+  const canonicalUrl = `${SITE_URL}/bearings/${slug}`;
+  const imageFile = resolveImage(bearing);
   const relatedHtml = buildRelated(allData, bearing);
   const descLines = (bearing.description || "").replace(/\r\n/g, "\n").split("\n").filter(Boolean);
   const waMsg = encodeURIComponent(`Hi, I need ${model} bearing. Please share price and availability.`);
@@ -195,13 +196,14 @@ function buildPage(bearing, allData) {
   <meta property="og:description" content="${metaDesc}">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:type" content="product">
-  <meta property="og:image" content="${SITE_URL}/photos/${imageBase}.avif">
+  <meta property="og:image" content="${SITE_URL}/photos/${imageFile}">
   <meta property="og:site_name" content="Perfect Bearing">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${pageTitle}">
   <meta name="twitter:description" content="${metaDesc}">
+  <meta name="twitter:image" content="${SITE_URL}/photos/${imageFile}">
 
   <!-- Schema.org Product Markup -->
   <script type="application/ld+json">${buildSchema(bearing)}</script>
@@ -212,8 +214,8 @@ function buildPage(bearing, allData) {
     "@type": "BreadcrumbList",
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL },
-      { "@type": "ListItem", "position": 2, "name": "Bearings", "item": `${SITE_URL}/index.html#bearings` },
-      { "@type": "ListItem", "position": 3, "name": type, "item": `${SITE_URL}/type.html?Type=${bearing.Type}` },
+      { "@type": "ListItem", "position": 2, "name": "Bearings", "item": `${SITE_URL}/#bearings` },
+      { "@type": "ListItem", "position": 3, "name": type, "item": typeUrl(bearing.Type) },
       { "@type": "ListItem", "position": 4, "name": model, "item": canonicalUrl }
     ]
   })}</script>
@@ -447,14 +449,14 @@ function buildPage(bearing, allData) {
 
   <header class="header">
     <div class="container nav-container">
-      <a href="../index.html" class="brand">
+      <a href="/" class="brand">
         <i class="fas fa-cog fa-spin" style="animation-duration: 10s;"></i> Perfect Bearing
       </a>
       <nav class="nav-menu">
-        <a href="../index.html" class="nav-link">Home</a>
-        <a href="../index.html#bearings" class="nav-link">Bearings</a>
-        <a href="../index.html#about" class="nav-link">About Us</a>
-        <a href="../index.html#contact" class="nav-link">Contact</a>
+        <a href="/" class="nav-link">Home</a>
+        <a href="/#bearings" class="nav-link">Bearings</a>
+        <a href="/#about" class="nav-link">About Us</a>
+        <a href="/#contact" class="nav-link">Contact</a>
       </nav>
       <div class="nav-tools">
         <div class="search-wrapper">
@@ -470,11 +472,11 @@ function buildPage(bearing, allData) {
 
     <!-- Breadcrumb -->
     <nav class="breadcrumb" aria-label="breadcrumb">
-      <a href="../index.html">Home</a>
+      <a href="/">Home</a>
       <span>›</span>
-      <a href="../index.html#bearings">Bearings</a>
+      <a href="/#bearings">Bearings</a>
       <span>›</span>
-      <a href="../type.html?Type=${bearing.Type}">${type}</a>
+      <a href="/type?Type=${encodeURIComponent(bearing.Type || "")}">${type}</a>
       <span>›</span>
       <span>${model}</span>
     </nav>
@@ -485,8 +487,8 @@ function buildPage(bearing, allData) {
       <div>
         <div class="detail-img-wrap">
           <img id="main-img"
-               src="../photos/${imageBase}.avif"
-               onerror="this.setAttribute('data-r','0');this.onerror=null;tryNext(this)"
+               src="../photos/${imageFile}"
+               onerror="this.onerror=null;this.src='../photos/default.jpg'"
                alt="${model} ${brand} ${type}">
         </div>
       </div>
@@ -561,18 +563,18 @@ function buildPage(bearing, allData) {
         </div>
         <div class="footer-col">
           <h3>Quick Links</h3>
-          <a href="../index.html#home">Home</a>
-          <a href="../index.html#bearings">Products</a>
-          <a href="../index.html#about">About Us</a>
-          <a href="../index.html#contact">Contact</a>
+          <a href="/#home">Home</a>
+          <a href="/#bearings">Products</a>
+          <a href="/#about">About Us</a>
+          <a href="/#contact">Contact</a>
         </div>
         <div class="footer-col">
           <h3>Get in Touch</h3>
           <p><i class="fas fa-map-marker-alt"></i> Opp. Bank Of Baroda, Lokhandbazar, Bhavnagar, Gujarat - 364006</p>
           <p><i class="fas fa-phone"></i> +91 8460640113</p>
           <p><i class="fas fa-envelope"></i> <a href="mailto:perfectbearingbvn@gmail.com">perfectbearingbvn@gmail.com</a></p>
-          <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/perfectbearing_" target="_blank">@perfectbearing_</a></p>
-          <p><i class="fab fa-facebook"></i> <a href="https://www.facebook.com/share/1AEKKCo8ei/?mibextid=wwXIfr" target="_blank">Perfect Bearing</a></p>
+          <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/perfectbearing_" target="_blank" rel="noopener">@perfectbearing_</a></p>
+          <p><i class="fab fa-facebook"></i> <a href="https://www.facebook.com/share/1AEKKCo8ei/?mibextid=wwXIfr" target="_blank" rel="noopener">Perfect Bearing</a></p>
         </div>
       </div>
       <div class="copyright">&copy; 2024 Perfect Bearing. All rights reserved.</div>
@@ -580,25 +582,9 @@ function buildPage(bearing, allData) {
   </footer>
 
   <a href="#" class="float-btn float-top" id="scrollToTop" title="Top"><i class="fas fa-arrow-up"></i></a>
-  <a href="https://wa.me/${WA_NUMBER}" target="_blank" class="float-btn float-wa" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+  <a href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener" class="float-btn float-wa" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
 
   <script>
-    // Image fallback chain
-    const FALLBACKS = ['jpg','webp','png','jpeg'];
-    const CAT_FALLBACK = '${fallbackImg}';
-    const IMG_BASE = '${imageBase}';
-    function tryNext(img) {
-      const r = parseInt(img.getAttribute('data-r') || '0');
-      if (r < FALLBACKS.length) {
-        img.setAttribute('data-r', r + 1);
-        img.onerror = () => tryNext(img);
-        img.src = '../photos/' + IMG_BASE + '.' + FALLBACKS[r];
-      } else {
-        img.onerror = null;
-        img.src = '../photos/' + CAT_FALLBACK;
-      }
-    }
-
     // Search autocomplete - fetch from root db
     const searchInput = document.getElementById("model-search-input");
     const autocompleteList = document.getElementById("autocomplete-list");
@@ -614,7 +600,7 @@ function buildPage(bearing, allData) {
           filtered.forEach(item => {
             const li = document.createElement("li");
             const slug = item.Model.toLowerCase().replace(/\\s+/g,"-").replace(/[^a-z0-9\\-\\.]/g,"");
-            li.innerHTML = '<a href="' + slug + '.html"><span>' + item.Model + '</span></a>';
+            li.innerHTML = '<a href="/bearings/' + slug + '"><span>' + item.Model + '</span></a>';
             autocompleteList.appendChild(li);
           });
           autocompleteList.style.display="block";
@@ -628,7 +614,7 @@ function buildPage(bearing, allData) {
           e.preventDefault();
           const val = searchInput.value.trim();
           const slug = val.toLowerCase().replace(/\\s+/g,"-").replace(/[^a-z0-9\\-\\.]/g,"");
-          if (val) window.location.href = slug + '.html';
+          if (val) window.location.href = '/bearings/' + slug;
         }
       });
     }
@@ -685,6 +671,7 @@ function buildPage(bearing, allData) {
 
   let success = 0;
   let skipped = 0;
+  const slugs = new Set();
 
   for (const bearing of allData) {
     if (!bearing.Model) { skipped++; continue; }
@@ -694,12 +681,44 @@ function buildPage(bearing, allData) {
     const html = buildPage(bearing, allData);
     const filePath = path.join(OUTPUT_DIR, `${slug}.html`);
     fs.writeFileSync(filePath, html, "utf8");
+    slugs.add(slug);
     success++;
 
     if (success % 100 === 0) {
       console.log(`   ... ${success} pages generated`);
     }
   }
+
+  // ── Sitemap (extensionless URLs to match Vercel cleanUrls) ─────────────────
+  const today = new Date().toISOString().slice(0, 10);
+  const types = [...new Set(allData.map(b => b.Type).filter(Boolean))].sort();
+  const urlTag = (loc, priority, changefreq) => `    <url>
+        <loc>${loc}</loc>
+        <lastmod>${today}</lastmod>
+        <changefreq>${changefreq}</changefreq>
+        <priority>${priority}</priority>
+    </url>`;
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+    <url>
+        <loc>${SITE_URL}/</loc>
+        <lastmod>${today}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        <image:image>
+            <image:loc>${SITE_URL}/photos/logo.jpg</image:loc>
+            <image:title>Perfect Bearing Logo</image:title>
+            <image:caption>Perfect Bearing - Industrial Bearings Exporter</image:caption>
+        </image:image>
+    </url>
+${types.map(t => urlTag(typeUrl(t), "0.8", "monthly")).join("\n")}
+${[...slugs].sort().map(s => urlTag(`${SITE_URL}/bearings/${s}`, "0.6", "monthly")).join("\n")}
+</urlset>
+`;
+  fs.writeFileSync("sitemap.xml", sitemap, "utf8");
+  console.log(`🗺️  sitemap.xml written: 1 home + ${types.length} type pages + ${slugs.size} bearing pages`);
 
   console.log(`\n✅ Done! ${success} pages generated → ./${OUTPUT_DIR}/`);
   if (skipped > 0) console.log(`⚠️  ${skipped} records skipped (missing Model field)`);

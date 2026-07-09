@@ -35,8 +35,8 @@ window.retryImageLoad = function (img, baseName, category = '') {
     'double-row-tapered-roller-bearing': 'drt1.avif',
     'cylindrical-roller-bearing': 'cr1.avif',
     'spherical-roller-bearing': 'spr1.jpeg',
-    'thrust-ball-bearing': 'thrust.webp',
-    'deep-groove-ball-bearing': 'db1.avif'
+    'thrust-bearing': 'THRUST.webp',
+    'deep-groove-ball-bearing': 'DP1.jpg'
   };
 
   if (index < extensions.length) {
@@ -95,7 +95,7 @@ if (searchInput) {
           .replace(/[^a-z0-9\-\.]/g, "");
 
         li.innerHTML = `
-        <a href="/bearings/${slug}.html">
+        <a href="/bearings/${slug}">
             <span>${item.Model}</span>
         </a>
       `;
@@ -124,7 +124,7 @@ if (searchInput) {
               .toLowerCase()
               .replace(/\s+/g, "-")
               .replace(/[^a-z0-9\-\.]/g, "");
-            window.location.href = `/bearings/${slug}.html`;
+            window.location.href = `/bearings/${slug}`;
           }
         }
 

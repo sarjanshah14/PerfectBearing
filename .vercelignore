@@ -1,0 +1,9 @@
+# Source/working files that must not be publicly served
+latest db.json
+latest db 1.xlsx
+bearings.json
+TODO.md
+README.md
+bearings-pages
+.claude
+.DS_Store
