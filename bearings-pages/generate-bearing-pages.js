@@ -474,7 +474,7 @@ function buildPage(bearing, allData) {
     </div>
   </header>
 
-  <div class="container section">
+  <main class="container section">
 
     <!-- Breadcrumb -->
     <nav class="breadcrumb" aria-label="breadcrumb">
@@ -557,7 +557,7 @@ function buildPage(bearing, allData) {
       </div>
     </div>` : ""}
 
-  </div>
+  </main>
 
   <!-- Footer -->
   <footer class="footer">

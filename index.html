@@ -160,6 +160,7 @@
         </div>
     </header>
 
+    <main>
     <!-- Hero -->
     <section id="home" class="hero">
         <img src="photos/hero-bg.jpg" alt="" class="back-video" width="1024" height="1024" fetchpriority="high">
@@ -413,21 +414,21 @@
                     <div class="contact-item">
                         <i class="fas fa-map-marker-alt"></i>
                         <div>
-                            <h4>Address</h4>
+                            <h3>Address</h3>
                             <p>Opp. Bank Of Baroda, Lokhandbazar,<br>Bhavnagar, Gujarat - 364006</p>
                         </div>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-phone"></i>
                         <div>
-                            <h4>Phone</h4>
+                            <h3>Phone</h3>
                             <p>+91 8460640113<br>+91 9825153910</p>
                         </div>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-share-alt"></i>
                         <div>
-                            <h4>Socials</h4>
+                            <h3>Socials</h3>
                             <p><i class="fas fa-envelope" style="width: 20px; text-align: center;"></i> <a
                                     href="mailto:perfectbearingbvn@gmail.com">perfectbearingbvn@gmail.com</a></p>
                             <p><i class="fab fa-instagram" style="width: 20px; text-align: center;"></i> <a
@@ -441,7 +442,7 @@
                     <div class="contact-item">
                         <i class="fas fa-user"></i>
                         <div>
-                            <h4>Contact Person</h4>
+                            <h3>Contact Person</h3>
                             <p>Jeet Doshi</p>
                         </div>
                     </div>
@@ -451,16 +452,16 @@
                 <div>
                     <form id="contact-form" class="feature-box" style="text-align: left; background: var(--bg-body);">
                         <div class="form-group">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" name="user_name" class="form-control" required>
+                            <label class="form-label" for="user_name">Full Name</label>
+                            <input type="text" name="user_name" id="user_name" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Phone Number</label>
-                            <input type="tel" name="user_contact" class="form-control" required>
+                            <label class="form-label" for="user_contact">Phone Number</label>
+                            <input type="tel" name="user_contact" id="user_contact" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Message</label>
-                            <textarea name="message" class="form-control" rows="4" required></textarea>
+                            <label class="form-label" for="message">Message</label>
+                            <textarea name="message" id="message" class="form-control" rows="4" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: 100%;">Send Inquiry</button>
                     </form>
@@ -477,6 +478,7 @@
             </div>
         </div>
     </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
