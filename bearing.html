@@ -32,8 +32,14 @@
   <meta property="og:image" content="https://www.perfectbearing.co.in/photos/logo.jpg">
   <meta property="og:site_name" content="Perfect Bearing">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="styles.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"
+    media="print" onload="this.media='all'">
+  <noscript>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  </noscript>
 </head>
 
 <body>
@@ -91,7 +97,7 @@
       <div class="nav-tools">
         <div class="search-wrapper">
           <input type="text" class="search-input" id="model-search-input" placeholder="Search model..."
-            autocomplete="off">
+            aria-label="Search bearing model" autocomplete="off">
           <ul class="autocomplete-list" id="autocomplete-list"></ul>
         </div>
         <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>

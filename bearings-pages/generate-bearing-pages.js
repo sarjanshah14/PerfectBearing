@@ -225,8 +225,14 @@ function buildPage(bearing, allData) {
   <link rel="shortcut icon" href="../photos/favicon.ico" type="image/x-icon">
   <link rel="icon" href="../photos/logo.jpg" type="image/jpeg">
   <link rel="apple-touch-icon" href="../photos/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="../styles.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"
+        media="print" onload="this.media='all'">
+  <noscript>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  </noscript>
   <style>
     /* ── Page-specific styles ── */
     .breadcrumb {
@@ -460,7 +466,7 @@ function buildPage(bearing, allData) {
       </nav>
       <div class="nav-tools">
         <div class="search-wrapper">
-          <input type="text" class="search-input" id="model-search-input" placeholder="Search model..." autocomplete="off">
+          <input type="text" class="search-input" id="model-search-input" placeholder="Search model..." aria-label="Search bearing model" autocomplete="off">
           <ul class="autocomplete-list" id="autocomplete-list"></ul>
         </div>
         <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
