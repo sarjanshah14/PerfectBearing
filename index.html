@@ -80,7 +80,8 @@
     }
     </script>
 
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"
         media="print" onload="this.media='all'">
     <noscript>
@@ -163,7 +164,11 @@
     <main>
     <!-- Hero -->
     <section id="home" class="hero">
-        <img src="photos/hero-bg.jpg" alt="" class="back-video" width="1024" height="1024" fetchpriority="high">
+        <picture>
+            <source type="image/webp" media="(max-width: 640px)" srcset="photos/hero-bg-640.webp">
+            <source type="image/webp" srcset="photos/hero-bg.webp">
+            <img src="photos/hero-bg.jpg" alt="" class="back-video" width="1024" height="1024" fetchpriority="high">
+        </picture>
         <div class="hero-overlay"></div>
         <div class="container hero-content">
             <h1>Welcome to Perfect Bearing</h1>
@@ -242,7 +247,7 @@
 
                 <div class="card">
                     <a href="/type?Type=Needle-Roller-Bearing">
-                        <div class="card-img"><img loading="lazy" src="photos/NRO.png" alt="Needle Roller"></div>
+                        <div class="card-img"><img loading="lazy" src="photos/NRO.webp" alt="Needle Roller"></div>
                         <div class="card-body">
                             <h3 class="card-title">Needle Roller Bearing</h3>
                             <p class="card-desc">High load capacity in compact design.</p>
